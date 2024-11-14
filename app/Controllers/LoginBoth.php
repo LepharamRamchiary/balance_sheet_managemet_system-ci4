@@ -13,7 +13,7 @@ class LoginBoth extends BaseController
     {
         helper('form');
         $this->loginModel = new LoginModel();
-        $this->session = session();  
+        $this->session = session();
     }
 
     public function index()
@@ -41,8 +41,9 @@ class LoginBoth extends BaseController
                         'username' => $user['username'],
                         'role' => $user['role'],
                         'status' => $user['status'],
+                        'logged_in' => true,
                     ];
-                    $this->session->set($userData);  
+                    $this->session->set($userData);
 
                     // Redirect based on user role
                     if ($user['role'] === 'admin') {
@@ -60,5 +61,15 @@ class LoginBoth extends BaseController
 
         return view('login_view', $data);
     }
+
+    // public function logout()
+    // {
+    //     // Clear session data
+    //     session()->remove('logged_in');
+    //     session()->remove('role');
+    //     session()->destroy();
+
+    //     // Redirect to the login page
+    //     return redirect()->to('loginboth');
+    // }
 }
-?>

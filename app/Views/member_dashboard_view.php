@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 
 <!-- Full-Screen Layout for Member Dashboard -->
-<div class="container-fluid vh-100 d-flex">
+<div class="container-fluid ">
     <div class="row w-100">
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2 p-3 bg-dark text-white d-flex flex-column">
@@ -14,7 +14,7 @@
                     <a class="nav-link text-white" href="#">Wallet Management</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Log Out</a>
+                    <a class="nav-link text-white" href="<?= base_url() . 'memberdashboard/logout' ?>">Log Out</a>
                 </li>
             </ul>
         </div>
