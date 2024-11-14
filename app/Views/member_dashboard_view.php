@@ -14,7 +14,7 @@
                     <a class="nav-link text-white" href="#">Wallet Management</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="<?= base_url() . 'memberdashboard/logout' ?>">Log Out</a>
+                    <a class="nav-link text-white" href="<?= base_url() . 'home/logout' ?>">Log Out</a>
                 </li>
             </ul>
         </div>

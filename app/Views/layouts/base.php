@@ -64,14 +64,14 @@
                                 <a class="nav-link" href="<?= base_url() . 'admindashboard' ?>">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url() . 'admindashboard/logout' ?>">Logout</a>
+                                <a class="nav-link" href="<?= base_url() . 'home/logout' ?>">Logout</a>
                             </li>
                         <?php elseif (session()->get('role') === 'member'): ?>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= base_url() . 'memberdashboard' ?>">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url() . 'memberdashboard/logout' ?>">Logout</a>
+                                <a class="nav-link" href="<?= base_url() . 'home/logout' ?>">Logout</a>
                             </li>
                         <?php endif; ?>
                     <?php else: ?>

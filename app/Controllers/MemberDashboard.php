@@ -12,15 +12,6 @@ class MemberDashboard extends BaseController
         }
         return view('member_dashboard_view');
     }
-
-    public function logout()
-    {
-        session()->remove('logged_in');
-        session()->remove('role');
-        session()->destroy();
-
-        return redirect()->to('loginboth');
-    }
 }
 
 ?>
