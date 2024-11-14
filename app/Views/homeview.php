@@ -7,8 +7,7 @@
     <div class="container">
         <h1 class="display-4">Welcome to Our Website</h1>
         <p class="lead">We offer the best services to help you succeed. Explore our website to know more.</p>
-        <a href="<?= base_url().'loginboth'?>" class="btn btn-primary btn-lg">Login</a>
-        <a href="<?= base_url(). 'register'?>" class="btn btn-primary btn-lg">Register</a>
+        <a href="<?= base_url().'home/about'?>" class="btn btn-primary btn-lg">About</a>
     </div>
 </div>
 

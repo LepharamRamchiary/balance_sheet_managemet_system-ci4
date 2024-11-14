@@ -58,13 +58,32 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= base_url() . 'home/about' ?>">About</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url() . 'register' ?>">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url() . 'loginboth' ?>">Login</a>
-                    </li>
+                    <?php if (session()->get('logged_in')): ?>
+                        <?php if (session()->get('role') === 'admin'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url() . 'admindashboard' ?>">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url() . 'admindashboard/logout' ?>">Logout</a>
+                            </li>
+                        <?php elseif (session()->get('role') === 'member'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url() . 'memberdashboard' ?>">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url() . 'memberdashboard/logout' ?>">Logout</a>
+                            </li>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url() . 'register' ?>">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url() . 'loginboth' ?>">Login</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
+
             </div>
         </div>
     </nav>
