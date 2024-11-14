@@ -10,7 +10,7 @@ class MemberDashboard extends BaseController
         if (!session()->get('logged_in') || session()->get('role') !== 'member') {
             return redirect()->to('loginboth');  
         }
-        return view('member_dashboard_view');
+        return view('member/member_dashboard_view');
     }
 }
 

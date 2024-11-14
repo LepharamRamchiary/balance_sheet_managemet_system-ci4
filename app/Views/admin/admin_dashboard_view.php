@@ -5,26 +5,7 @@
 <div class="container-fluid vh-100 d-flex">
     <div class="row w-100">
         <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 p-3 bg-dark text-white d-flex flex-column">
-            <h4 class="text-center mb-4">Admin Dashboard</h4>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Member Report</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Kyc Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Wallet Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Member Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="<?= base_url().'home/logout'?>">Log Out</a>
-                </li>
-            </ul>
-        </div>
+        <?= $this->include('partials/sidebar'); ?>
 
         <!-- Main Content -->
         <div class="col-md-9 col-lg-10 p-4 d-flex flex-column">
