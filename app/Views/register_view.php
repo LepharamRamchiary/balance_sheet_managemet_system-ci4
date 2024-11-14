@@ -1,13 +1,36 @@
 <?= $this->extend('layouts/base'); ?>
 <?= $this->section('content') ?>
 
+
+
 <!-- Register Form -->
 <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
     <div class="row w-100">
         <div class="col-md-6 col-lg-4 mx-auto">
             <div class="card shadow-sm">
                 <div class="card-body">
+
+                    <!-- Display Success Message -->
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success">
+                            <?= session()->getFlashdata('success'); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Display Error Message -->
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger">
+                            <?= session()->getFlashdata('error'); ?>
+                        </div>
+                    <?php endif; ?>
+
                     <h2 class="text-center mb-4">Register</h2>
+
+                    <?php if (isset($validation)): ?>
+                        <div class="alert alert-danger">
+                            <?= $validation->listErrors(); ?>
+                        </div>
+                    <?php endif; ?>
 
                     <!-- Form -->
                     <?php echo form_open(); ?>

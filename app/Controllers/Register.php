@@ -6,12 +6,15 @@ use App\Models\RegisterModel;
 
 class Register extends BaseController
 {
-    protected $registerModel;
+    public $registerModel;
+    public $session;
+
 
     public function __construct()
     {
         helper(['form']);
         $this->registerModel = new RegisterModel();
+        $this->session = session();
     }
 
     public function index()
@@ -42,9 +45,11 @@ class Register extends BaseController
                 // Insert user into the database
                 if ($this->registerModel->createUser($userdata)) {
                     // Redirect to a success page
-                    return redirect()->to('loginboth');
+                    $this->session->setFlashdata('success', 'Your account has been created successfully. You can now log in.');
+                    return redirect()->to(current_url());
                 } else {
-                    $data['error'] = 'There was a problem creating your account. Please try again.';
+                    $this->session->setFlashdata('error', 'There was a problem creating your account. Please try again.');
+                    return redirect()->to(current_url());
                 }
             } else {
                 $data['validation'] = $this->validator;
@@ -59,4 +64,3 @@ class Register extends BaseController
         return view('register_success');
     }
 }
-?>
