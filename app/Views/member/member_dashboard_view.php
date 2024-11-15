@@ -6,7 +6,7 @@
         <!-- Sidebar -->
         <?= $this->include('partials/membersidebar'); ?>
         <div class="col-md-9 col-lg-10 p-4 d-flex flex-column h-100">
-            <h2 class="mb-4">Welcome, Member</h2>
+            <h2 class="mb-4">Hi, <?= $userName;?> Welcom to your Dashboard</h2>
 
             <!-- Cards Section -->
             <div class="row mb-4">

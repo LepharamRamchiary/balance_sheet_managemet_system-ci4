@@ -34,6 +34,12 @@ class LoginBoth extends BaseController
                 // Check if user exists in the database
                 $user = $this->loginModel->verifyEmail($email);
 
+                // Check if the user is blocked
+                if ($user && $user['status'] === 'blocked') {
+                    $this->session->setFlashdata('error', 'You are blocked, please contact the admin.');
+                    return redirect()->to('loginboth');
+                }
+
                 if ($user && password_verify($password, $user['password'])) {
                     // Store user information in session using $this->session
                     $userData = [
@@ -61,15 +67,4 @@ class LoginBoth extends BaseController
 
         return view('login_view', $data);
     }
-
-    // public function logout()
-    // {
-    //     // Clear session data
-    //     session()->remove('logged_in');
-    //     session()->remove('role');
-    //     session()->destroy();
-
-    //     // Redirect to the login page
-    //     return redirect()->to('loginboth');
-    // }
 }

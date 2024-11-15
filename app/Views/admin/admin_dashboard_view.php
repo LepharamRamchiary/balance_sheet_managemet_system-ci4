@@ -33,7 +33,7 @@
                 <div class="col-sm-6 col-md-4">
                     <div class="card text-white bg-danger mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">Active Users</h5>
+                            <h5 class="card-title">Blocked Users</h5>
                             <p class="card-text"><?= $blockedUser; ?></p>
                         </div>
                     </div>

@@ -4,13 +4,21 @@ namespace App\Controllers;
 
 class MemberDashboard extends BaseController
 {
+    public $session;
+
+    public function __construct()
+    {
+        $this->session = session();
+    }
+
     public function index()
     {
 
         if (!session()->get('logged_in') || session()->get('role') !== 'member') {
             return redirect()->to('loginboth');  
         }
-        return view('member/member_dashboard_view');
+        $data['userName'] = $this->session->get('username');
+        return view('member/member_dashboard_view',$data);
     }
 
     public function memberKyc(){
