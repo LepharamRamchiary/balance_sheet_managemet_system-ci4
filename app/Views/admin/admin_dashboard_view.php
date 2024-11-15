@@ -16,7 +16,7 @@
                     <div class="card text-white bg-primary mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Total Users</h5>
-                            <p class="card-text">120</p>
+                            <p class="card-text"><?= $totalUser; ?></p>
                         </div>
                     </div>
                 </div>
@@ -25,16 +25,16 @@
                     <div class="card text-white bg-success mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Active Users</h5>
-                            <p class="card-text">110</p>
+                            <p class="card-text"><?= $activeUser; ?></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-md-4">
-                    <div class="card text-white bg-success mb-3">
+                    <div class="card text-white bg-danger mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Active Users</h5>
-                            <p class="card-text">110</p>
+                            <p class="card-text"><?= $blockedUser; ?></p>
                         </div>
                     </div>
                 </div>
