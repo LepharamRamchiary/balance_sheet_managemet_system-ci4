@@ -25,4 +25,15 @@ class UserModel extends Model {
         $builder->where('status', 'blocked');
         return $builder->countAllResults();
     }
+
+    public function getAllUsers(){
+        $builder = $this->db->table($this->table);
+        $result = $builder->get();
+
+        if($result->getNumRows()>0){
+            return $result->getResult();
+        }else{
+            return false;
+        }
+    }
 }

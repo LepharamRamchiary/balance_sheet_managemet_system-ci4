@@ -24,25 +24,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        // Dummy data for testing
-                        $members = [
-                            ['id' => 1, 'name' => 'Alice Johnson', 'email' => 'alice@example.com', 'role' => 'member', 'status' => 'Active'],
-                            ['id' => 2, 'name' => 'Bob Smith', 'email' => 'bob@example.com', 'role' => 'member', 'status' => 'Inactive'],
-                            ['id' => 3, 'name' => 'Charlie Lee', 'email' => 'charlie@example.com', 'role' => 'admin', 'status' => 'Active'],
-                            ['id' => 4, 'name' => 'Diana Prince', 'email' => 'diana@example.com', 'role' => 'member', 'status' => 'Active'],
-                            ['id' => 5, 'name' => 'Evan Wright', 'email' => 'evan@example.com', 'role' => 'member', 'status' => 'Inactive'],
-                        ];
-                        ?>
-
-                        <?php if (!empty($members) && is_array($members)): ?>
-                            <?php foreach ($members as $member): ?>
+                        <?php if (!empty($users) && is_array($users)): ?>
+                            <?php foreach ($users as $user): ?>
                                 <tr>
-                                    <td><?= esc($member['id']); ?></td>
-                                    <td><?= esc($member['name']); ?></td>
-                                    <td><?= esc($member['email']); ?></td>
-                                    <td><?= esc($member['role']); ?></td>
-                                    <td><?= esc($member['status']); ?></td>
+                                    <td><?= esc($user->id); ?></td>
+                                    <td><?= esc($user->username); ?></td>
+                                    <td><?= esc($user->email); ?></td>
+                                    <td><?= esc($user->role); ?></td>
+                                    <td><?= esc($user->status); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>

@@ -30,7 +30,8 @@ class AdminDashboard extends BaseController
 
     public function memberReport()
     {
-        return view('admin/member_report_view');
+        $data['users'] = $this->userModel->getAllUsers();
+        return view('admin/member_report_view', $data);
     }
 
     public function kyc()
