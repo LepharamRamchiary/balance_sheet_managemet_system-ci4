@@ -8,10 +8,12 @@ class AdminDashboard extends BaseController
 {
 
     public $userModel;
+    public $session;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
+        $this->session = session();
     }
 
 
@@ -24,6 +26,7 @@ class AdminDashboard extends BaseController
         $data['totalUser'] = $this->userModel->getTotalUsers();
         $data['activeUser'] = $this->userModel->getActiveUsers();
         $data['blockedUser'] = $this->userModel->getBlockedUsers();
+        $data['userName'] = $this->session->get('username');
 
         return view('admin/admin_dashboard_view', $data);
     }

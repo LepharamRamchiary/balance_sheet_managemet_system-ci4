@@ -9,9 +9,9 @@
 
         <!-- Main Content -->
         <div class="col-md-9 col-lg-10 p-4 d-flex flex-column">
-            <h2>Welcome User</h2>
+            <h2>Hi, <?= $userName ?> Welcome To Dashboard</h2>
 
-            <div class="row mb-4">
+            <div class="row mb-4 mt-5">
                 <div class="col-sm-6 col-md-4">
                     <div class="card text-white bg-primary mb-3">
                         <div class="card-body">

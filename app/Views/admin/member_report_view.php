@@ -25,13 +25,14 @@
                     </thead>
                     <tbody>
                         <?php if (!empty($users) && is_array($users)): ?>
+                            <?php $count = 1; ?>
                             <?php foreach ($users as $user): ?>
                                 <tr>
-                                    <td><?= esc($user->id); ?></td>
-                                    <td><?= esc($user->username); ?></td>
-                                    <td><?= esc($user->email); ?></td>
-                                    <td><?= esc($user->role); ?></td>
-                                    <td><?= esc($user->status); ?></td>
+                                    <td><?= $count++; ?></td>
+                                    <td><?= $user->username; ?></td>
+                                    <td><?= $user->email; ?></td>
+                                    <td><?= $user->role; ?></td>
+                                    <td><?= $user->status; ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
