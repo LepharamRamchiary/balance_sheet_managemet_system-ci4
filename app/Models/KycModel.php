@@ -27,4 +27,29 @@ class KycModel extends Model
         }
     }
 
+    public function getAllKycRequests()
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('kyc.id, users.username as name, users.email, kyc.kyc_status, kyc.doc');
+        $builder->join('users', 'users.id = kyc.user_id');
+        $builder->orderBy('kyc.created_at', 'DESC');
+        $result = $builder->get();
+
+        return $result->getResultArray();
+    }
+
+    public function approveKyc($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('id', $id);
+        return $builder->update(['kyc_status' => 'approved']);
+    }
+
+    public function rejectKyc($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('id', $id);
+        return $builder->update(['kyc_status' => 'rejected']);
+    }
+
 }

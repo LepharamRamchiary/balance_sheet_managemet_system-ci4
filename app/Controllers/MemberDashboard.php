@@ -55,14 +55,14 @@ class MemberDashboard extends BaseController
                 $file = $this->request->getFile('doc');
 
                 if ($file->isValid() && !$file->hasMoved()) {
-                    $filePath = WRITEPATH . 'uploads/';
+                    $filePath = ROOTPATH . 'public/uploads/';
                     $fileName = $file->getRandomName();
                     $file->move($filePath, $fileName);
 
                     $kycData = [
                         'user_id' => session()->get('user_id'),
                         'dob' => $dob,
-                        'doc' => 'uploads/' . $fileName,
+                        'doc' => 'public/uploads/' . $fileName,
                         'kyc_status' => 'pending', 
                     ];
 

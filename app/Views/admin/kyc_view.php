@@ -13,6 +13,18 @@
             <h2>KYC Management</h2>
             <p class="mb-4">Review and approve or reject KYC requests from members.</p>
 
+            <?php if (!empty($success)): ?>
+                <div id="success-alert" class="alert alert-success">
+                    <?= esc($success); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($error)): ?>
+                <div id="error-alert" class="alert alert-danger">
+                    <?= esc($error); ?>
+                </div>
+            <?php endif; ?>
+
             <!-- KYC Data Table -->
             <div class="table-responsive mt-4">
                 <table class="table table-bordered table-hover">
@@ -27,31 +39,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        // Dummy data for testing
-                        $kyc_requests = [
-                            ['id' => 1, 'name' => 'Alice Johnson', 'email' => 'alice@example.com', 'kyc_status' => 'Pending', 'documents' => 'ID Card, Address Proof'],
-                            ['id' => 2, 'name' => 'Bob Smith', 'email' => 'bob@example.com', 'kyc_status' => 'Pending', 'documents' => 'Passport, Utility Bill'],
-                            ['id' => 3, 'name' => 'Charlie Lee', 'email' => 'charlie@example.com', 'kyc_status' => 'Approved', 'documents' => 'Driver License, Tax Document'],
-                        ];
-                        ?>
-
-                        <?php if (!empty($kyc_requests) && is_array($kyc_requests)): ?>
-                            <?php foreach ($kyc_requests as $request): ?>
+                        <?php if (!empty($kycRequests) && is_array($kycRequests)): ?>
+                            <?php $count = 1; ?>
+                            <?php foreach ($kycRequests as $request): ?>
                                 <tr>
-                                    <td><?= esc($request['id']); ?></td>
+                                    <td><?= esc($count++); ?></td>
                                     <td><?= esc($request['name']); ?></td>
                                     <td><?= esc($request['email']); ?></td>
                                     <td>
-                                        <span class="badge <?= $request['kyc_status'] === 'Approved' ? 'bg-success' : 'bg-warning' ?>">
+                                        <span class="badge 
+                                            <?= $request['kyc_status'] === 'approved' ? 'bg-success' : ($request['kyc_status'] === 'rejected' ? 'bg-danger' : 'bg-warning') ?>">
                                             <?= esc($request['kyc_status']); ?>
                                         </span>
                                     </td>
-                                    <td><?= esc($request['documents']); ?></td>
                                     <td>
-                                        <?php if ($request['kyc_status'] === 'Pending'): ?>
-                                            <a href="<?= base_url('admin/kyc/approve/' . $request['id']); ?>" class="btn btn-success btn-sm">Approve</a>
-                                            <a href="<?= base_url('admin/kyc/reject/' . $request['id']); ?>" class="btn btn-danger btn-sm">Reject</a>
+                                        <a href="<?= base_url($request['doc']); ?>" target="_blank">View Document</a>
+                                    </td>
+                                    <td>
+                                        <?php if ($request['kyc_status'] === 'pending'): ?>
+                                            <a href="<?= base_url('admindashboard/approvekyc/' . $request['id']); ?>" class="btn btn-success btn-sm">Approve</a>
+                                            <a href="<?= base_url('admindashboard/rejectkyc/' . $request['id']); ?>" class="btn btn-danger btn-sm">Reject</a>
                                         <?php else: ?>
                                             <span class="text-muted">No action needed</span>
                                         <?php endif; ?>
@@ -69,5 +76,15 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    setTimeout(() => {
+        const successAlert = document.getElementById('success-alert');
+        const errorAlert = document.getElementById('error-alert');
+        if (successAlert) successAlert.style.display = 'none';
+        if (errorAlert) errorAlert.style.display = 'none';
+    }, 3000);
+</script>
 
 <?= $this->endSection() ?>

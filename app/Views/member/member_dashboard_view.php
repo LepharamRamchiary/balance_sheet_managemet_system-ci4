@@ -37,7 +37,7 @@
             </div>
 
             <!-- KYC Status Section -->
-            <div class="card">
+            <div class="card shadow-lg">
                 <div class="card-header">
                     <h4>Your KYC Status</h4>
                 </div>
