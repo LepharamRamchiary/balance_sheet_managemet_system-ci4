@@ -20,7 +20,6 @@ class KycModel extends Model
         $builder->where('user_id', $userId);
         $result = $builder->get();
 
-        // Return the first row if data exists, else return false
         if (count($result->getResultArray()) > 0) {
             return $result->getRowArray();
         } else {
@@ -28,30 +27,4 @@ class KycModel extends Model
         }
     }
 
-
-
-    // // Method to get KYC details by user ID
-    // public function getKycByUserId($userId)
-    // {
-    //     $builder = $this->db->table($this->table);
-    //     $builder->where('user_id', $userId);
-    //     $result = $builder->get();
-
-    //     // Return the first row if data exists, else return false
-    //     if (count($result->getResultArray()) > 0) {
-    //         return $result->getRowArray();
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    // // Method to update KYC status
-    // public function updateKycStatus($id, $status, $remarks = '')
-    // {
-    //     $builder = $this->db->table($this->table);
-    //     $builder->set('kyc_status', $status);
-    //     $builder->set('remarks', $remarks);
-    //     $builder->where('id', $id);
-    //     return $builder->update(); // Returns true if update successful, false otherwise
-    // }
 }
