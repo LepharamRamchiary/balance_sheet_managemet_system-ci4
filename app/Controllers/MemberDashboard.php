@@ -23,6 +23,17 @@ class MemberDashboard extends BaseController
         }
         
         $data['userName'] = $this->session->get('username');
+        $data['userId'] = $this->session->get('user_id');
+
+        $existingKyc = $this->kycModel->getKycByUserId($data['userId']);
+        
+        if ($existingKyc) {
+            $data['kycStatus'] = $existingKyc['kyc_status'];  
+        } else {
+            $data['kycStatus'] = 'not_submitted';  
+        }
+
+
         return view('member/member_dashboard_view', $data);
     }
 
@@ -37,7 +48,7 @@ class MemberDashboard extends BaseController
 
         if ($existingKyc && ($existingKyc['kyc_status'] === 'pending' || $existingKyc['kyc_status'] === 'approved')) {
             $this->session->setFlashdata('error', 'Your KYC is already submitted. Please wait for admin approval or rejection.');
-            //return redirect()->to('member-kyc');
+            // return redirect()->to('memberdashboard/submitmemberkyc');
         } else {
             if ($this->request->getMethod() === 'POST' && $this->validate($rules)) {
                 $dob = $this->request->getVar('dob');
@@ -58,7 +69,7 @@ class MemberDashboard extends BaseController
                     $this->kycModel->insertKyc($kycData);
 
                     $this->session->setFlashdata('success', 'KYC submitted successfully. Please wait for admin approval.');
-                    //return redirect()->to('member-kyc'); 
+                    // return redirect()->to('memberdashboard/submitmemberkyc'); 
                 } else {
                     $this->session->setFlashdata('error', 'File upload failed.');
                 }
