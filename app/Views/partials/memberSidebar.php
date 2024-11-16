@@ -4,7 +4,7 @@
             <a class="nav-link text-white" href="<?= base_url() . 'memberdashboard' ?>">Dashboard</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-white" href="<?= base_url() . 'memberdashboard/memberkyc' ?>">KYC Management</a>
+            <a class="nav-link text-white" href="<?= base_url() . 'memberdashboard/submitmemberkyc' ?>">KYC Management</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="<?= base_url() . 'memberdashboard/memberwallet' ?>">Wallet Management</a>
