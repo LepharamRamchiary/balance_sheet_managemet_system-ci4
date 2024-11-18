@@ -22,15 +22,19 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Wallet Management -->
+                <!-- Wallet Management Section -->
                 <div class="col-md-6">
                     <div class="card h-100 shadow-lg">
                         <div class="card-header bg-success text-white">
                             <h5>You Can Deposit and Withdraw Funds</h5>
                         </div>
                         <div class="card-body d-flex flex-column justify-content-between">
-                            <p class="card-text">Manage your funds by depositing or withdrawing money into your wallet.</p>
-                            <a href="<?= base_url() . 'memberdashboard/memberwallet' ?>" class="btn btn-success mt-2">Manage Wallet</a>
+                            <?php if ($kycStatus === 'approved'): ?>
+                                <p class="card-text">Manage your funds by depositing or withdrawing money into your wallet.</p>
+                                <a href="<?= base_url() . 'memberdashboard/memberwallet' ?>" class="btn btn-success mt-2">Manage Wallet</a>
+                            <?php else: ?>
+                                <p class="card-text">You cannot perform wallet management tasks until your KYC is approved.</p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -62,8 +66,12 @@
                     <?php endif; ?>
                 </div>
             </div>
+
+
         </div>
+
     </div>
+</div>
 </div>
 
 <?= $this->endSection() ?>

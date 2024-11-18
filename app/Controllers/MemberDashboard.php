@@ -27,6 +27,7 @@ class MemberDashboard extends BaseController
 
         $data['userName'] = $this->session->get('username');
         $data['userId'] = $this->session->get('user_id');
+        
 
         $existingKyc = $this->kycModel->getKycByUserId($data['userId']);
 
@@ -92,7 +93,7 @@ class MemberDashboard extends BaseController
         $data['wallet'] = $wallet;
 
         $existingKyc = $this->kycModel->getKycByUserId($userId);
-        if ($existingKyc && $existingKyc['kyc_status'] !== 'approved') {
+        if (!$existingKyc || $existingKyc['kyc_status'] !== 'approved') {
             $this->session->setFlashdata('errors', 'Your KYC is not approved. Please wait for admin approval.');
             return redirect()->to('memberdashboard');
         }
