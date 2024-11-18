@@ -62,7 +62,7 @@ class AdminDashboard extends BaseController
         } else {
             session()->setFlashdata('error', 'Failed to approve KYC.');
         }
-        return $this->kyc();
+        return redirect()->to('admindashboard/kyc');
     }
 
     public function rejectKyc($id)
@@ -72,7 +72,7 @@ class AdminDashboard extends BaseController
         } else {
             session()->setFlashdata('error', 'Failed to reject KYC.');
         }
-        return $this->kyc();
+        return redirect()->to('admindashboard/kyc');
     }
 
     public function wallet()
@@ -105,7 +105,7 @@ class AdminDashboard extends BaseController
             $this->session->setFlashdata('error', 'User not found.');
         }
 
-        return $this->memberblocking();
+        return redirect()->to('admindashboard/memberblocking');
     }
 
     public function activateUser($userId)
@@ -118,6 +118,6 @@ class AdminDashboard extends BaseController
             $this->session->setFlashdata('error', 'User not found.');
         }
 
-        return $this->memberblocking();
+        return redirect()->to('admindashboard/memberblocking');
     }
 }
