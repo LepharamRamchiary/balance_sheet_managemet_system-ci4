@@ -3,17 +3,20 @@
 namespace App\Controllers;
 
 use App\Models\KycModel;
+use App\Models\WalletModel;
 
 class MemberDashboard extends BaseController
 {
     public $session;
     public $kycModel;
+    public $walletModel;
 
     public function __construct()
     {
         helper('form');
         $this->session = session();
         $this->kycModel = new KycModel();
+        $this->walletModel = new WalletModel();
     }
 
     public function index()
@@ -21,16 +24,16 @@ class MemberDashboard extends BaseController
         if (!session()->get('logged_in') || session()->get('role') !== 'member') {
             return redirect()->to('loginboth');
         }
-        
+
         $data['userName'] = $this->session->get('username');
         $data['userId'] = $this->session->get('user_id');
 
         $existingKyc = $this->kycModel->getKycByUserId($data['userId']);
-        
+
         if ($existingKyc) {
-            $data['kycStatus'] = $existingKyc['kyc_status'];  
+            $data['kycStatus'] = $existingKyc['kyc_status'];
         } else {
-            $data['kycStatus'] = 'not_submitted';  
+            $data['kycStatus'] = 'not_submitted';
         }
 
 
@@ -63,13 +66,13 @@ class MemberDashboard extends BaseController
                         'user_id' => session()->get('user_id'),
                         'dob' => $dob,
                         'doc' => 'public/uploads/' . $fileName,
-                        'kyc_status' => 'pending', 
+                        'kyc_status' => 'pending',
                     ];
 
                     $this->kycModel->insertKyc($kycData);
 
                     $this->session->setFlashdata('success', 'KYC submitted successfully. Please wait for admin approval.');
-                    // return redirect()->to('memberdashboard/submitmemberkyc'); 
+                    return redirect()->to('memberdashboard/submitmemberkyc');
                 } else {
                     $this->session->setFlashdata('error', 'File upload failed.');
                 }
@@ -82,6 +85,33 @@ class MemberDashboard extends BaseController
 
     public function memberWallet()
     {
-        return view('member/member_wallet_view');
+
+        $userId = $this->session->get('user_id');
+
+        $wallet = $this->walletModel->getBalance($userId);
+        $data['wallet'] = $wallet;
+
+        if ($this->request->getMethod() === 'POST') {
+            $balance = $this->request->getVar('balance');
+            $transactionType = $this->request->getVar('t_type');
+
+            if ($balance <= 0) {
+                $this->session->setFlashdata('errors', 'Amount must be greater than zero.');
+                return redirect()->to('memberdashboard/memberwallet');
+            }
+
+            $transactionSuccess = $this->walletModel->processTransaction($userId, $balance, $transactionType);
+
+            if ($transactionSuccess) {
+                $this->session->setFlashdata('successfull', ucfirst($transactionType) . ' successful! Wait For Admin to Approve.');
+            } else {
+                $this->session->setFlashdata('errors', 'Insufficient funds for withdrawal.');
+            }
+            $wallet = $this->walletModel->getBalance($userId);
+            $data['wallet'] = $wallet;
+            return redirect()->to('memberdashboard/memberwallet');
+        }
+
+        return view('member/member_wallet_view', $data);
     }
 }
