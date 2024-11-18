@@ -82,6 +82,42 @@ class AdminDashboard extends BaseController
 
     public function memberblocking()
     {
-        return view('admin/member_blocking_view');
+        if (!session()->get('logged_in') || session()->get('role') !== 'admin') {
+            return redirect()->to('loginboth');
+        }
+
+        $data['members'] = $this->userModel->getAllUsers() ?: [];
+        // print_r($data['members']);
+        // die();
+        $data['success'] = $this->session->getFlashdata('success');
+        $data['error'] = $this->session->getFlashdata('error');
+
+        return view('admin/member_blocking_view', $data);
+    }
+
+    public function blockUser($userId)
+    {
+        $user = $this->userModel->getUserById($userId);
+        if ($user) {
+            $this->userModel->updateStatus($userId, 'blocked');
+            $this->session->setFlashdata('success', 'User successfully blocked.');
+        } else {
+            $this->session->setFlashdata('error', 'User not found.');
+        }
+
+        return $this->memberblocking();
+    }
+
+    public function activateUser($userId)
+    {
+        $user = $this->userModel->getUserById($userId);
+        if ($user) {
+            $this->userModel->updateStatus($userId, 'active');
+            $this->session->setFlashdata('success', 'User successfully activated.');
+        } else {
+            $this->session->setFlashdata('error', 'User not found.');
+        }
+
+        return $this->memberblocking();
     }
 }

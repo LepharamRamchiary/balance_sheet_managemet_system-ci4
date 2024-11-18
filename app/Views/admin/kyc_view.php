@@ -31,7 +31,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Username</th>
                             <th>Email</th>
                             <th>KYC Status</th>
                             <th>Submitted Documents</th>
