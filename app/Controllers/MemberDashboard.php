@@ -92,6 +92,19 @@ class MemberDashboard extends BaseController
         $balance = $this->walletModel->getBalanceByUserId($userId);
         $data['balance'] = $balance;
 
+        $existingKyc = $this->kycModel->getKycByUserId($userId);
+
+        $existingKyc = $this->kycModel->getKycByUserId($userId);
+        if (!$existingKyc) {
+            $this->session->setFlashdata('errors', 'You must submit your KYC before accessing the wallet section.');
+            return redirect()->to('memberdashboard');
+        }
+
+        if ($existingKyc && $existingKyc['kyc_status'] !== 'approved') {
+            $this->session->setFlashdata('errors', 'Your KYC is not approved. Please wait for admin approval.');
+            return redirect()->to('memberdashboard');
+        }
+
         if ($this->request->getMethod() === 'POST') {
             $amount = $this->request->getPost('amount');
             $transactionType = $this->request->getPost('t_type');
