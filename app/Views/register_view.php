@@ -12,14 +12,14 @@
 
                     <!-- Display Success Message -->
                     <?php if (session()->getFlashdata('success')): ?>
-                        <div class="alert alert-success">
+                        <div id="success-alert" class="alert alert-success">
                             <?= session()->getFlashdata('success'); ?>
                         </div>
                     <?php endif; ?>
 
                     <!-- Display Error Message -->
                     <?php if (session()->getFlashdata('error')): ?>
-                        <div class="alert alert-danger">
+                        <div id="error-alert" class="alert alert-danger">
                             <?= session()->getFlashdata('error'); ?>
                         </div>
                     <?php endif; ?>
@@ -65,5 +65,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    setTimeout(() => {
+        const successAlert = document.getElementById('success-alert');
+        const errorAlert = document.getElementById('error-alert');
+        if (successAlert) successAlert.style.display = 'none';
+        if (errorAlert) errorAlert.style.display = 'none';
+    }, 3000);
+</script>
 
 <?= $this->endSection() ?>
