@@ -4,7 +4,7 @@ The **Simple Member and Admin Portal** is a user-friendly web-based application 
 This project is developed for **learning purposes**, to explore and understand the concepts of web application development using CI4, including form handling, file uploads, session management, and role-based access control. It provides hands-on experience in building a practical, real-world application using modern tools and technologies.
 
 ## Technologies Used
-- **Frontend:** Bootstrap 5 for responsive design.
-- **Backend:** CodeIgniter 4 framework for a structured and scalable backend.
+- **Frontend:** Bootstrap 5 for responsive design. [Doc](https://getbootstrap.com/)
+- **Backend:** CodeIgniter 4 framework for a structured and scalable backend. [Doc](https://codeigniter.com/user_guide/index.html)
 - **Database:** MySQL for secure data storage and retrieval.
 - **Authentication:** Secure session management and role-based access control.
