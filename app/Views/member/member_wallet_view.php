@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <div class="card shadow-lg">
                     <div class="card-header bg-success text-white">
-                        <h5>Wallet Balance: ₹<?= number_format($balance, 2); ?></h5>
+                        <h5>Wallet Balance: $ <?= number_format($balance, 2); ?></h5>
                     </div>
                     <div class="card-body">
                         <?php if (isset($successfull) && $successfull): ?>

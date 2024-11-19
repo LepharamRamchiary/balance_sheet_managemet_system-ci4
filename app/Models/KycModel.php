@@ -52,4 +52,31 @@ class KycModel extends Model
         return $builder->update(['kyc_status' => 'rejected']);
     }
 
+    public function deleteKycById($id)
+    {
+        return $this->db->table($this->table)->where('id', $id)->delete();
+    }
+
+    public function updateKyc($userId, $kycData)
+    {
+        // Ensure $kycData is not empty
+        if (empty($kycData)) {
+            return false;
+        }
+
+        // Remove any null or empty values
+        $kycData = array_filter($kycData, function ($value) {
+            return $value !== null && $value !== '';
+        });
+
+        // Check if there are any valid data to update
+        if (empty($kycData)) {
+            return false;
+        }
+
+        // Use query builder to ensure update works
+        return $this->db->table($this->table)
+            ->where('user_id', $userId)
+            ->update($kycData);
+    }
 }
