@@ -4,18 +4,21 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\KycModel;
+use App\Models\WalletModel;
 
 class AdminDashboard extends BaseController
 {
 
     public $userModel;
     public $kycModel;
+    public $walletModel;
     public $session;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
         $this->kycModel = new KycModel();
+        $this->walletModel = new WalletModel();
         $this->session = session();
     }
 
@@ -77,7 +80,64 @@ class AdminDashboard extends BaseController
 
     public function wallet()
     {
-        return view('admin/wallet_view');
+        if (!session()->get('logged_in') || session()->get('role') !== 'admin') {
+            return redirect()->to('loginboth');
+        }
+
+        $data['wallets'] = $this->walletModel->getAllWallets();
+        $data['success'] = $this->session->getFlashdata('success');
+        $data['error'] = $this->session->getFlashdata('error');
+
+        return view('admin/wallet_view', $data);
+    }
+
+    public function deposit($transactionId)
+    {
+        if (!$this->request->getMethod() === 'post') {
+            return redirect()->to('admindashboard/wallet');
+        }
+
+        $transaction = $this->walletModel->getTransactionById($transactionId);
+        if (!$transaction || $transaction->status !== 'pending' || $transaction->t_type !== 'deposit') {
+            $this->session->setFlashdata('error', 'Invalid transaction.');
+            return redirect()->to('admindashboard/wallet');
+        }
+
+        if ($this->walletModel->processTransaction($transactionId, $transaction->user_id, $transaction->amount, 'deposit')) {
+            $this->session->setFlashdata('success', 'Deposit of $' . number_format($transaction->amount, 2) . ' processed successfully.');
+        } else {
+            $this->session->setFlashdata('error', 'Failed to process deposit.');
+        }
+
+        return redirect()->to('admindashboard/wallet');
+    }
+
+
+    public function withdraw($transactionId)
+    {
+        if (!$this->request->getMethod() === 'post') {
+            return redirect()->to('admindashboard/wallet');
+        }
+
+        $transaction = $this->walletModel->getTransactionById($transactionId);
+        if (!$transaction || $transaction->status !== 'pending' || $transaction->t_type !== 'withdraw') {
+            $this->session->setFlashdata('error', 'Invalid transaction.');
+            return redirect()->to('admindashboard/wallet');
+        }
+
+        $currentBalance = $this->walletModel->getBalanceByUserId($transaction->user_id);
+        if ($transaction->amount > $currentBalance) {
+            $this->session->setFlashdata('error', 'Insufficient balance for withdrawal.');
+            return redirect()->to('admindashboard/wallet');
+        }
+
+        if ($this->walletModel->processTransaction($transactionId, $transaction->user_id, $transaction->amount, 'withdraw')) {
+            $this->session->setFlashdata('success', 'Withdrawal of $' . number_format($transaction->amount, 2) . ' processed successfully.');
+        } else {
+            $this->session->setFlashdata('error', 'Failed to process withdrawal.');
+        }
+
+        return redirect()->to('admindashboard/wallet');
     }
 
     public function memberblocking()

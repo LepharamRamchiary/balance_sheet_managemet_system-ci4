@@ -6,7 +6,7 @@
     <?= $this->include('partials/membersidebar'); ?>
 
     <div class="col-md-9 col-lg-10 p-4 d-flex flex-column">
-        <h2>Member KYC Section</h2>
+        <h2>Your KYC Section</h2>
 
         <!-- Flash messages for success or error -->
         <?php if (session()->getFlashdata('success')): ?>

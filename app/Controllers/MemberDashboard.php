@@ -27,7 +27,7 @@ class MemberDashboard extends BaseController
 
         $data['userName'] = $this->session->get('username');
         $data['userId'] = $this->session->get('user_id');
-        
+
 
         $existingKyc = $this->kycModel->getKycByUserId($data['userId']);
 
@@ -86,38 +86,38 @@ class MemberDashboard extends BaseController
 
     public function memberWallet()
     {
-
+        $data = [];
         $userId = $this->session->get('user_id');
 
-        $wallet = $this->walletModel->getBalance($userId);
-        $data['wallet'] = $wallet;
-
-        $existingKyc = $this->kycModel->getKycByUserId($userId);
-        if (!$existingKyc || $existingKyc['kyc_status'] !== 'approved') {
-            $this->session->setFlashdata('errors', 'Your KYC is not approved. Please wait for admin approval.');
-            return redirect()->to('memberdashboard');
-        }
+        $balance = $this->walletModel->getBalanceByUserId($userId);
+        $data['balance'] = $balance;
 
         if ($this->request->getMethod() === 'POST') {
-            $balance = $this->request->getVar('balance');
-            $transactionType = $this->request->getVar('t_type');
+            $amount = $this->request->getPost('amount');
+            $transactionType = $this->request->getPost('t_type');
 
-            if ($balance <= 0) {
+            if ($amount > $balance &&  $transactionType === 'withdraw') {
+                $this->session->setFlashdata('errors', 'Insufficient balance for the withdrawal. Please wait for Admin');
+            } else if (!is_numeric($amount) || $amount <= 0) {
                 $this->session->setFlashdata('errors', 'Amount must be greater than zero.');
-                return redirect()->to('memberdashboard/memberwallet');
-            }
-
-            $transactionSuccess = $this->walletModel->processTransaction($userId, $balance, $transactionType);
-
-            if ($transactionSuccess) {
-                $this->session->setFlashdata('successfull', ucfirst($transactionType) . ' successful! Wait For Admin to Approve.');
             } else {
-                $this->session->setFlashdata('errors', 'Insufficient funds for withdrawal.');
+                $transactionData = [
+                    'user_id' => $userId,
+                    'amount' => $amount,
+                    't_type' => $transactionType
+                ];
+
+                if ($this->walletModel->transactionRequest($transactionData)) {
+                    $this->session->setFlashdata('successfull', 'Transaction request submitted successfully. Please wait for Admin to add you balance');
+                } else {
+                    $this->session->setFlashdata('errors', 'Failed to submit transaction request.');
+                }
             }
-            $wallet = $this->walletModel->getBalance($userId);
-            $data['wallet'] = $wallet;
-            return redirect()->to('memberdashboard/memberwallet');
+
+            return redirect()->to(base_url('memberdashboard/memberwallet'));
         }
+        $data['successfull'] = session()->getFlashdata('successfull');
+        $data['errors'] = session()->getFlashdata('errors');
 
         return view('member/member_wallet_view', $data);
     }

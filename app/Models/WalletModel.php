@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use CodeIgniter\Model;
@@ -13,6 +14,7 @@ class WalletModel extends Model
     {
         $builder = $this->db->table($this->table);
         $builder->where('user_id', $userId);
+        $builder->where('status', 'completed');
         $builder->orderBy('created_at', 'DESC');
         $result = $builder->get();
 
@@ -23,52 +25,65 @@ class WalletModel extends Model
         }
     }
 
-    // Method to process a transaction (deposit or withdrawal)
-    public function processTransaction($userId, $amount, $transactionType)
+    public function processTransaction($transactionId, $userId, $amount, $transactionType)
     {
-        // Retrieve the wallet of the user
-        $wallet = $this->getBalance($userId);
+        $builder = $this->db->table($this->table);
+        
+        // Start transaction
+        $this->db->transStart();
 
-        // If no wallet found, create a new wallet entry
-        if (!$wallet) {
-            $builder = $this->db->table($this->table);
-            $data = [
+        try {
+            // Get current wallet balance
+            $currentBalance = $this->getBalanceByUserId($userId);
+
+            // Calculate new balance based on transaction type
+            if ($transactionType === 'deposit') {
+                $newBalance = $currentBalance + $amount;
+            } elseif ($transactionType === 'withdraw') {
+                if ($currentBalance < $amount) {
+                    return false; // Insufficient funds
+                }
+                $newBalance = $currentBalance - $amount;
+            } else {
+                return false; // Invalid transaction type
+            }
+
+            // Update the transaction status to completed
+            $builder->where('id', $transactionId);
+            $builder->update([
+                'status' => 'completed',
+                'balance' => $newBalance,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+
+            // Create a new transaction record with the updated balance
+            $transactionData = [
                 'user_id' => $userId,
-                'balance' => 0.00,  // Default balance is 0.00
+                'balance' => $newBalance,
                 't_type' => $transactionType,
                 'amount' => $amount,
+                'status' => 'completed',
+                'created_at' => date('Y-m-d H:i:s')
             ];
-            $builder->insert($data);  // Insert initial transaction
-            $wallet = $this->getBalance($userId);  // Retrieve updated wallet info
-        }
+            $builder->insert($transactionData);
 
-        // Process deposit and withdrawal logic
-        if ($transactionType === 'deposit') {
-            $newBalance = $wallet->balance + $amount;  // Add the amount to the balance
-        } elseif ($transactionType === 'withdraw') {
-            // Ensure sufficient funds for withdrawal
-            if ($wallet->balance < $amount) {
-                return false;  // Insufficient funds
-            }
-            $newBalance = $wallet->balance - $amount;  // Subtract the amount from the balance
-        } else {
-            return false;  // Invalid transaction type
-        }
+            // Commit transaction
+            $this->db->transComplete();
 
-        // Update the wallet balance in the database
+            return $this->db->transStatus();
+        } catch (\Exception $e) {
+            log_message('error', 'Transaction processing failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+
+    public function transactionRequest($data)
+    {
         $builder = $this->db->table($this->table);
-        $transactionData = [
-            'user_id' => $userId,
-            'balance' => $newBalance,
-            't_type' => $transactionType,
-            'amount' => $amount,
-        ];
-        $builder->insert($transactionData);  // Insert the new transaction record
-
-        return true;  // Return success
+        return $builder->insert($data);
     }
 
-    // Method to get all transactions for a user
     public function getTransactionsByUserId($userId)
     {
         $builder = $this->db->table($this->table);
@@ -77,11 +92,42 @@ class WalletModel extends Model
         $result = $builder->get();
 
         if ($result->getNumRows() > 0) {
-            return $result->getResult();  // Return all transactions for the user
+            return $result->getResult();
         } else {
-            return false;  // No transactions found
+            return false;
         }
     }
-}
 
-?>
+
+    public function getBalanceByUserId($userId)
+    {
+        $result = $this->db->table($this->table)
+            ->where('user_id', $userId)
+            ->where('status', 'completed')
+            ->orderBy('created_at', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRow();
+
+        return $result ? $result->balance : 0.00;
+    }
+    
+
+    public function getTransactionById($transactionId)
+    {
+        return $this->db->table($this->table)
+            ->where('id', $transactionId)
+            ->get()
+            ->getRow();
+    }
+
+    public function getAllWallets()
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('wallet.*, users.username, users.email');
+        $builder->join('users', 'wallet.user_id = users.id');
+        $builder->where('wallet.status', 'pending');
+        $builder->orderBy('wallet.created_at', 'DESC');
+        return $builder->get()->getResultArray();
+    }
+}
