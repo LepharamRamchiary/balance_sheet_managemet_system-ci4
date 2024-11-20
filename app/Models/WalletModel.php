@@ -8,8 +8,6 @@ class WalletModel extends Model
 {
     // The table name
     protected $table = 'wallet';
-
-    // Method to get the balance of a user
     public function getBalance($userId)
     {
         $builder = $this->db->table($this->table);
@@ -20,6 +18,20 @@ class WalletModel extends Model
 
         if ($result->getNumRows() > 0) {
             return $result->getRow();
+        } else {
+            return false;
+        }
+    }
+
+    public function getTransactionsByUserId($userId)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('user_id', $userId);
+        $builder->orderBy('created_at', 'DESC');
+        $result = $builder->get();
+
+        if ($result->getNumRows() > 0) {
+            return $result->getResult();
         } else {
             return false;
         }
@@ -84,19 +96,7 @@ class WalletModel extends Model
         return $builder->insert($data);
     }
 
-    public function getTransactionsByUserId($userId)
-    {
-        $builder = $this->db->table($this->table);
-        $builder->where('user_id', $userId);
-        $builder->orderBy('created_at', 'DESC');
-        $result = $builder->get();
-
-        if ($result->getNumRows() > 0) {
-            return $result->getResult();
-        } else {
-            return false;
-        }
-    }
+   
 
 
     public function getBalanceByUserId($userId)

@@ -70,23 +70,6 @@ class AdminDashboard extends BaseController
 
     public function rejectKyc($id)
     {
-
-        // $kycData = $this->kycModel->getKycByUserId($id);
-        // if (!$kycData) {
-        //     $this->session->setFlashdata('error', 'KYC record not found.');
-        //     return redirect()->to('admindashboard/kyc');
-        // }
-
-        // if ($this->kycModel->rejectKyc($id)) {
-        //     if ($this->kycModel->deleteKycById($id)) {
-        //         $this->session->setFlashdata('success', 'KYC rejected and removed successfully.');
-        //     } else {
-        //         $this->session->setFlashdata('error', 'KYC rejected but failed to remove record.');
-        //     }
-        // } else {
-        //     $this->session->setFlashdata('error', 'Failed to reject KYC.');
-        // }
-
         if ($this->kycModel->rejectKyc($id)) {
             session()->setFlashdata('success', 'KYC rejected successfully.');
         } else {

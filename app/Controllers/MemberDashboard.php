@@ -129,7 +129,7 @@ class MemberDashboard extends BaseController
         $balance = $this->walletModel->getBalanceByUserId($userId);
         $data['balance'] = $balance;
 
-        $existingKyc = $this->kycModel->getKycByUserId($userId);
+        // $existingKyc = $this->kycModel->getKycByUserId($userId);
 
         $existingKyc = $this->kycModel->getKycByUserId($userId);
         if (!$existingKyc) {
