@@ -16,7 +16,13 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/balance_sheet/';
+    // public string $baseURL = 'http://localhost/balance_sheet/';
+    public string $baseURL = '';
+    public function __construct()
+    {
+        // Set baseURL dynamically using environment variable or default to localhost
+        $this->baseURL = env('CI_BASEURL', 'http://localhost/balance_sheet/');
+    }
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
