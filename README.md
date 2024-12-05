@@ -8,3 +8,6 @@ This project is developed for **learning purposes**, to explore and understand t
 - **Backend:** CodeIgniter 4 framework for a structured and scalable backend. [Doc](https://codeigniter.com/user_guide/index.html)
 - **Database:** MySQL for secure data storage and retrieval.
 - **Authentication:** Secure session management and role-based access control.
+
+## Database
+- Google Drive [link](https://drive.google.com/file/d/17g-dH78bnsjG4bUXplGU1mi0Jq8K1uBc/view?usp=sharing)
